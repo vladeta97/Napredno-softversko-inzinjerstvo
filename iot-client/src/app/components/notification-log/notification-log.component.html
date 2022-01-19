@@ -1,0 +1,36 @@
+<h1 class="m-3 p-4" style="font-size: 5vw;">Notification Log</h1>
+<div class="p-2 mt-4">
+  <div class="pb-2 bg-dark rounded">
+    <button class="btn-success btn mt-2 ml-2" (click)="setFilter(1)">
+      Oak Filter
+    </button>
+    <button class="btn-success btn mt-2 ml-2" (click)="setFilter(2)">
+      Foster Filter
+    </button>
+    <button class="btn-success btn mt-2 ml-2" (click)="setFilter(3)">
+      63rd Filter
+    </button>
+    <button class="btn-danger btn mt-2 ml-2" (click)="setFilter(0)">
+      Clear Filter
+    </button>
+  </div>
+  <div style="height: 100vh; overflow-y: scroll;" class="border">
+    <div *ngIf="commandService.totalNotifications.length > 0">
+      <div
+        *ngFor="
+          let notification of returnValid(commandService.totalNotifications);
+          let i = index
+        "
+      >
+        <div class="border rounded m-2 p-2">
+          <div>
+            Location : {{ notification.location }} Date/Time :{{
+              notification.timestamp
+            }}
+          </div>
+          <div>{{ notification.message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

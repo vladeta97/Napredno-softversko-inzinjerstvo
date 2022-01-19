@@ -1,0 +1,25 @@
+<h1 class="m-3 p-4" style="font-size: 4vw;">List Of Current Commands</h1>
+<div class="mt-4 pb-2 border rounded">
+  <ul *ngIf="nizKomandi.length > 0">
+    <li class="row" *ngFor="let komanda of nizKomandi; let i = index">
+      <div class="h6 pt-1 m-2">
+        Command :
+      </div>
+      <div class="h5 m-2">{{ komanda }}</div>
+    </li>
+  </ul>
+</div>
+<div class="border rounded m-1 pt-3">
+  <div class="form-group container">
+    <label class="h6" for="tempControl">Enter New Command : </label>
+    <input
+      type="text"
+      name="tempControl"
+      class="form-control"
+      [formControl]="tempControl"
+    />
+    <button (click)="dodajKomandu()" class="btn btn-success mt-2">
+      Add Command
+    </button>
+  </div>
+</div>

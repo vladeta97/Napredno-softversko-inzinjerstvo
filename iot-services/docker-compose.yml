@@ -1,0 +1,136 @@
+version: "3.0"
+services:
+  influx:
+    image: influxdb
+    environment:
+      - INFLUXDB_ADMIN_ENABLED=true
+    volumes:
+      - influxdata:/var/lib/influx.db
+    ports:
+      - "8086:8086"
+  nats:
+    image: nats:latest
+    #image: nats:latest -p 4222:4222 -ti
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+      - "6222:6222"
+  gateway:
+    build:
+      context: .
+    image: service-gateway
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-gateway"
+      SERVICES: gateway
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - nats
+  serializer:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-serializer"
+      SERVICES: serializer
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: admin
+      INFLUXDB_DATABASE: bazamerenja
+      INFLUXDB_HOST: influx
+    #links:
+    #- analytics
+    depends_on:
+      - nats
+      - influx
+  analyzer:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: admin
+      INFLUXDB_DATABASE: bazaanaliza
+      INFLUXDB_HOST: influx
+      NODEID: "node-analyzer"
+      SERVICES: analyzer
+      PORT: 3002
+    ports:
+      - "3002:3002"
+      - "4444:4444"
+    depends_on:
+      - nats
+      - influx
+  oaksensor:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-oaksensor"
+      SERVICES: oaksensor
+    depends_on:
+      - nats
+      #
+  fostersensor:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+       NODEID: "node-fostersensor"
+      SERVICES: fostersensor
+    depends_on:
+      - nats
+   sixthreesensor:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-sixthreesensor"
+      SERVICES: sixthreesensor
+    depends_on:
+      - nats
+  #
+  command:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-command"
+      SERVICES: command
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: admin
+      INFLUXDB_DATABASE: bazacommand
+      INFLUXDB_HOST: influx
+    depends_on:
+      - nats
+      - influx
+  oakactuator:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-oakactuator"
+      SERVICES: oakactuator
+    depends_on:
+      - nats
+  fosteractuator:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-fosteractuator"
+      SERVICES: fosteractuator
+    depends_on:
+      - nats
+  sixthreeactuator:
+    build:
+      context: .
+    env_file: docker-compose.env
+    environment:
+      NODEID: "node-sixthreeactuator"
+      SERVICES: sixthreeactuator
+    depends_on:
+      - nats
+volumes:
+  influxdata:

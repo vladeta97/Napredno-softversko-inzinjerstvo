@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height: 80px;">
+  <a class="navbar-brand" routerLink="">Chichago Beach Monitoring</a>
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/oak">Oak Beach</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/foster">Foster Beach</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/sixthree">63rd Beach</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/notificationlog">Notification Log</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/command">Administrator</a>
+    </li>
+  </ul>
+</nav>
+<div class="row w-100 max-height">
+  <div
+    style="height: 125vh; overflow-y: scroll;"
+    class="notifikacije ml-2 bg-dark p-2 max-height"
+  >
+    <div>
+      <button (click)="ocisti()" class="btn btn-danger w-100 mr-1">
+        Clear Notifications
+      </button>
+    </div>
+    <div *ngIf="nizNotifikacija.length > 0">
+      <div
+        class="rounded p-1 m-1 bg-primary text-white mt-2 mb-2"
+        *ngFor="let notification of nizNotifikacija.reverse(); let i = index"
+        (click)="skloniNotifikaciju(i)"
+      >
+        <div>
+          <div class="row">
+            <div class="text-dark ml-3 mr-1">Location:</div>
+            <div>{{ notification.location }}</div>
+          </div>
+          <div class="row">
+            <div class="text-dark ml-3 mr-1">Date/Time :</div>
+            <div>{{ notification.timestamp }}</div>
+          </div>
+        </div>
+        <div class="font-weight-bold font-italic">
+          {{ notification.message }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w-75 ml-2">
+    <router-outlet></router-outlet>
+  </div>
+</div>
